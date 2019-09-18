@@ -1,0 +1,9 @@
+# Created by .ignore support plugin (hsz.mobi)
+.idea/
+pkg/
+bin/*
+log/*
+conf/*.conf
+bin/
+waf_server
+waf_gate

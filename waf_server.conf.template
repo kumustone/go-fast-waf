@@ -1,0 +1,5 @@
+[server]
+WafServerAddress = "127.0.0.1:8000"
+HttpAPIAddress = "127.0.0.1:8001"
+
+

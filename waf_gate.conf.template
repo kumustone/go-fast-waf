@@ -1,0 +1,18 @@
+[gate]
+GateHttpAddress = "0.0.0.0:2080"
+GateHttpsAddress = "0.0.0.0:2443"
+GateAPIAddress = "0.0.0.0:2081"
+UpstreamList = [
+    "1.1.1.1:80"
+]
+
+[wafrpc]
+CheckSwitch = true
+[wafrpc.CheckList]
+    Include = ["xxxxxxx"]
+    Exclude = []
+    CheckDefault = true
+[wafrpc.ServerAddr]
+    Address = ["127.0.0.1:8000"]
+
+
