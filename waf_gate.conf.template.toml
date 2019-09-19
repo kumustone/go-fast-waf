@@ -3,7 +3,25 @@
 GateHttpAddress = "0.0.0.0:80"
 
 # Gate Https Listen Addresses
+StartHttps = true
 GateHttpsAddress = "0.0.0.0:443"
+
+# 多个二级域名使用不同的key
+CertKeyList = [
+[
+    "A.xxx.com",
+    "A.pem",
+    "A.key"
+],
+[
+    "B.xxx.com",
+    "B.pem",
+    "B.key"
+]
+]
+
+CertFile = "xxxxxxx.pem"
+KeyFile  = "xxxxx.key"
 
 # Gat API Service
 GateAPIAddress = "0.0.0.0:2081"
