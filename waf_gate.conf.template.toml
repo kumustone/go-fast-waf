@@ -1,25 +1,3 @@
-# panda-waf
-
-
-1. 安装
-    - 依赖 go1.12+
-    - git clone https://github.com/kumustone/panda-waf.git
-    - cd panda-waf 
-    - ./build.sh
-  
- 安装后会生成两个bin文件waf-gate waf-server 放在$GOPATH/bin下；
- 
- 2. 运行
- 
- waf-gate -c /YourConfigPath/waf_gate.conf -l /YourLogPath/log 
- 
- waf-server -c /YouConfigPaht/waf_server.conf -l /YourLogPath/log -r /YourRuleDir
- 
- 3. 配置说明
-
-waf-gate  
-
-```
 [gate]
 #Gate Http Listen Address
 GateHttpAddress = "0.0.0.0:80"
@@ -53,16 +31,5 @@ CheckSwitch = true
 [wafrpc.ServerAddr]
     # waf-server的地址列表；如果是多个，如果有多个waf-server按照轮询策略转发请求；
     Address = ["127.0.0.1:8000"]
-```
 
-waf-server 配置
 
-```
-[server]
-# WafServer的监听地址
-WafServerAddress = "127.0.0.1:8000"
-
-# WafServer接口地址
-HttpAPIAddress = "127.0.0.1:8001"
-
-```
