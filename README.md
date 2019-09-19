@@ -1,7 +1,7 @@
 # panda-waf
 
 
-1. 安装
+## 1. 安装
     - 依赖 go1.12+
     - git clone https://github.com/kumustone/panda-waf.git
     - cd panda-waf 
@@ -9,13 +9,13 @@
   
  安装后会生成两个bin文件waf-gate waf-server 放在$GOPATH/bin下；
  
- 2. 运行
+## 2. 运行
  
- waf-gate -c /YourConfigPath/waf_gate.conf -l /YourLogPath/log 
+ > waf-gate -c /YourConfigPath/waf_gate.conf -l /YourLogPath/log 
  
- waf-server -c /YouConfigPaht/waf_server.conf -l /YourLogPath/log -r /YourRuleDir
+ > waf-server -c /YouConfigPaht/waf_server.conf -l /YourLogPath/log -r /YourRuleDir
  
- 3. 配置说明
+## 3. 配置说明
 
 waf-gate  
 
