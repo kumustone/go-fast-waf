@@ -6,7 +6,27 @@
 
 ![](https://github.com/kumustone/waf/blob/master/doc/waf-1.jpg)
 
-**网络连接功能**
+
+
+waf_gate是极轻量的的httpproxy反向代理，在go本身reverseproxy库的基础上做了很少量的封装和功能添加，性能损失非常小。waf_gate本身具有简单的路由分发功能，如果网站部署本分非常简单，没有业务路由，可以直接通过waf-gate分发给下一级的业务服务器。如果路由较为复杂，那么waf_gate直接转发给下一级的proxy（比如NGINX）进行路由分发；在此过程中waf_gate对整个业务链条来说是完全透明的。
+
+waf检测是通过waf_gate转发给waf_server，然后waf_server将检测结果返回给waf_gate来做拦截还是放过操作。没有直接在waf_gate直接做规则的原因主要基于以下几个考虑：
+
+1. 如果检测规则过于复杂，尤其在包含大量正则的情况下，CPU耗时消耗会比较高，影响waf_gate的转发时间，从而增加整个链路的业务耗时；
+2. waf检测可能会缓存大量的数据，导致内存过大，GC耗时过长；
+3. 有一些规则需要多个httpproxy的数据进行汇总，然后进行处理；这样httpProxy就无能无力；
+4. 在实际的应用场景中，请求和响应数据可能需要存储；
+
+
+
+waf_gate的支持的功能：
+
+- 轻量级，性能、RT损耗非常小；
+- 支持重写请求包头包，响应头，响应尾部；
+
+
+
+**waf_gate与waf_server的网络通信**，是通过[tcpstream](<https://github.com/kumustone/tcpstream>)的库来实现的
 
 - waf_gate与waf_server之间通过tcp长链连接；
 - waf_gate与waf_server之间采用多对多连接，gate通过轮询策略发送给server检测；
@@ -19,7 +39,7 @@
 
 - 基于Host,Referer,Url,User-Agent,Content-Type 正则表达式的组合规则，各个字段支持为空；
 
-- rule规则通过JSON格式配置，方便后续通过接口规则做扩展；
+- rule规则通过JSON格式配置，方便后续通过接口规则做扩展，和后续进行GUI开发；
 
     比如拦截请求： Host: www.xxx.com； Refer 为空； User-Agent中包nmap关键字；
 
