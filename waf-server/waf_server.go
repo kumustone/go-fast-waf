@@ -3,7 +3,7 @@ package main
 import (
 	"flag"
 	"github.com/BurntSushi/toml"
-	"github.com/kumustone/panda-waf"
+	"github.com/kumustone/waf"
 	"github.com/kumustone/tcpstream"
 	"github.com/natefinch/lumberjack"
 	"log"
@@ -21,7 +21,7 @@ type WafServerConf struct {
 }
 
 var (
-	confFile = flag.String("c", "./waf_server.conf", "Config file")
+	confFile = flag.String("c", "waf_server.conf", "Config file")
 	logPath  = flag.String("l", "./log", " log path")
 	rulePath = flag.String("r", "./rules", " rule path")
 )
@@ -36,19 +36,20 @@ func main() {
 		return
 	}
 
-	defer panda_waf.PanicRecovery(true)
+	defer waf.PanicRecovery(true)
 	log.SetOutput(&lumberjack.Logger{
-		Filename:   "waf_server.log",
+		Filename:   *logPath + "/waf_server.log",
 		MaxSize:    10,
 		MaxBackups: 10,
 		MaxAge:     30,
 	})
 
-	if err := panda_waf.InitRulePath(*rulePath); err != nil {
+	if err := waf.InitRulePath(*rulePath); err != nil {
 		log.Fatal("InitRulePath : ", err.Error())
 	}
 
 	log.Println("waf-server listen at : ", c.Server.WafServerAddress)
+
 	if err := tcpstream.NewTCPServer(c.Server.WafServerAddress, &ServerHandler{}).Serve(); err != nil {
 		log.Println("server : ", err.Error())
 	}
@@ -59,13 +60,13 @@ func main() {
 type ServerHandler struct{}
 
 func (*ServerHandler) OnData(conn *tcpstream.TcpStream, msg *tcpstream.Message) error {
-	request := &panda_waf.WafHttpRequest{}
+	request := &waf.WafHttpRequest{}
 	if err := request.UnmarshalJSON(msg.Body); err != nil {
 		return err
 	}
 
-	var resp *panda_waf.WafProxyResp
-	for _, c := range panda_waf.CheckList {
+	var resp *waf.WafProxyResp
+	for _, c := range waf.CheckList {
 		resp = c.CheckRequest(request)
 		if resp.RuleName != "" {
 			break

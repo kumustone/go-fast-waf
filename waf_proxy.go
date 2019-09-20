@@ -1,4 +1,4 @@
-package panda_waf
+package waf
 
 import (
 	"errors"
@@ -8,21 +8,25 @@ import (
 
 var routerServer = NewRouter()
 
+func handleServerNotify(n AddrNotify) {
+	for _, addr := range n.Address {
+		if n.Action == WAF_SERVER_ADD {
+			routerServer.Add(&RouterItem{
+				Key:   addr,
+				Value: tcpstream.NewSyncClient(addr),
+			})
+		} else if n.Action == WAF_SERVER_REMOVE {
+			routerServer.Remove(addr)
+		}
+	}
+}
+
 func WaitServerNotify() {
 	go func() {
 		for {
 			select {
 			case n := <-ServerNotify:
-				for _, addr := range n.Address {
-					if n.Action == WAF_SERVER_ADD {
-						routerServer.Add(&RouterItem{
-							Key:   addr,
-							Value: tcpstream.NewSyncClient(addr),
-						})
-					} else if n.Action == WAF_SERVER_REMOVE {
-						routerServer.Remove(addr)
-					}
-				}
+				handleServerNotify(n)
 			}
 		}
 	}()

@@ -1,4 +1,4 @@
-package panda_waf
+package waf
 
 import (
 	"sync"
