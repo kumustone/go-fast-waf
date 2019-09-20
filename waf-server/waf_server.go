@@ -5,6 +5,7 @@ import (
 	"github.com/BurntSushi/toml"
 	"github.com/kumustone/panda-waf"
 	"github.com/kumustone/tcpstream"
+	"github.com/natefinch/lumberjack"
 	"log"
 )
 
@@ -20,7 +21,7 @@ type WafServerConf struct {
 }
 
 var (
-	confFile = flag.String("c", "./conf/waf_server.conf", "Config file")
+	confFile = flag.String("c", "./waf_server.conf", "Config file")
 	logPath  = flag.String("l", "./log", " log path")
 	rulePath = flag.String("r", "./rules", " rule path")
 )
@@ -36,12 +37,12 @@ func main() {
 	}
 
 	defer panda_waf.PanicRecovery(true)
-	//log.SetOutput(&lumberjack.Logger{
-	//	Filename:   "waf_server.log",
-	//	MaxSize:    10,
-	//	MaxBackups: 10,
-	//	MaxAge:     30,
-	//})
+	log.SetOutput(&lumberjack.Logger{
+		Filename:   "waf_server.log",
+		MaxSize:    10,
+		MaxBackups: 10,
+		MaxAge:     30,
+	})
 
 	if err := panda_waf.InitRulePath(*rulePath); err != nil {
 		log.Fatal("InitRulePath : ", err.Error())
