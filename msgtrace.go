@@ -90,15 +90,15 @@ func NewMsgTraceCache() *MsgTraceCache {
 
 var G_msg_trace = NewMsgTraceCache()
 
-func (this *MsgTraceCache) Cache(request_id uint64, mt *MsgTrace) {
-	smap := &this.sessionMaps[request_id%sessionMapNum]
+func (m *MsgTraceCache) Cache(request_id uint64, mt *MsgTrace) {
+	smap := &m.sessionMaps[request_id%sessionMapNum]
 	smap.rwmutex.Lock()
 	smap.sessions[request_id] = mt
 	smap.rwmutex.Unlock()
 }
 
-func (this *MsgTraceCache) Get(request_id uint64) *MsgTrace {
-	smap := &this.sessionMaps[request_id%sessionMapNum]
+func (m *MsgTraceCache) Get(request_id uint64) *MsgTrace {
+	smap := &m.sessionMaps[request_id%sessionMapNum]
 
 	smap.rwmutex.RLock()
 	defer smap.rwmutex.RUnlock()
@@ -110,8 +110,8 @@ func (this *MsgTraceCache) Get(request_id uint64) *MsgTrace {
 	return nil
 }
 
-func (this *MsgTraceCache) Remove(request_id uint64) {
-	smap := &this.sessionMaps[request_id%sessionMapNum]
+func (m *MsgTraceCache) Remove(request_id uint64) {
+	smap := &m.sessionMaps[request_id%sessionMapNum]
 	smap.rwmutex.Lock()
 	defer smap.rwmutex.Unlock()
 	_, exist := smap.sessions[request_id]

@@ -29,7 +29,7 @@ type WafGateConfig struct {
 }
 
 var (
-	confFile = flag.String("c", "./waf_gate.conf.template.toml", "Config file")
+	confFile = flag.String("c", "./waf_gate.conf", "Config file")
 	logPath  = flag.String("l", "./log", " log path")
 )
 
@@ -42,7 +42,7 @@ func main() {
 		return
 	}
 
-	fmt.Println(c)
+	log.Println(c)
 
 	defer panda_waf.PanicRecovery(true)
 
