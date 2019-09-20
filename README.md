@@ -109,5 +109,49 @@ HttpAPIAddress = "127.0.0.1:8001"
 
 ```
 
-**目前支持的规则还比较少，欢迎添加一些规则**
+## 4. 规则文件说明
+
+ip 黑名单的例子
+```
+{
+  "rules": [
+    {
+      "type": "IpBlackList",
+      "action": "add",
+      "rule_name": "IpBlackList-0",
+      "iplist": [
+        "1.1.1.1",
+        "2.2.2.2"
+      ]
+    }
+  ]
+}
+```
+
+正则规则的例子url 满足正则：\\(?\\s*\\b(alert|prompt|confirm|console\\.log)\\s*\\)?\\s*(\\(|`) 都会被拦截；
+
+```
+{
+  "rules": [
+    {
+      "type": "Group",
+      "action": "add",
+      "rule_name": "xss-1",
+      "desc": "this is a test rule",
+      "group_rule": [
+        {
+          "field": "Url",
+          "op": "is",
+          "empty": false,
+          "val": "\\(?\\s*\\b(alert|prompt|confirm|console\\.log)\\s*\\)?\\s*(\\(|`)"
+        }
+      ]
+    }
+    ]
+  }
+```
+
+每一个规则文件里面包含的都是一份完整的json，不同的规则文件，可以叠加使用；
+
+目前支持的规则还比较少，欢迎添加一些规则**
 
