@@ -1,6 +1,7 @@
-package panda_waf
+package waf
 
 import (
+	"log"
 	"regexp"
 	"sync"
 )
@@ -48,6 +49,7 @@ func (r *RuleList) HandleRule(j *JsonRule) {
 			rule.Rule = append(rule.Rule, rule_item)
 		}
 
+		log.Println("RuleList add rule :", rule)
 		r.Add(rule)
 	}
 }
@@ -109,6 +111,9 @@ func (r *Rule) CheckRequest(req *WafHttpRequest) (bool, *WafProxyResp) {
 			return false, SuccessResp
 		}
 	}
+
+	log.Println(*req, " shoot ", *r)
+
 	return true, &WafProxyResp{
 		RetCode:  WAF_INTERCEPT,
 		RuleName: r.RuleName,
@@ -145,12 +150,13 @@ func (r *RuleItem) CompileReg() (err error) {
 }
 
 func (r *RuleItem) CheckRequest(req *WafHttpRequest) bool {
-	r.Val = GetFieldFromReq(req, r.Field)
+	Val := GetFieldFromReq(req, r.Field)
 	if r.Empty {
-		return r.Val == ""
+		return Val == ""
 	}
 
-	shoot := len(r.reg.FindString(r.Val)) > 0
+
+	shoot := len(r.reg.FindString(Val)) > 0
 
 	if r.Op == "is" {
 		return shoot

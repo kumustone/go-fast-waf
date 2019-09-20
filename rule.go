@@ -1,10 +1,11 @@
-package panda_waf
+package waf
 
 import (
 	"encoding/json"
 	"errors"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"os"
 	"regexp"
 	"strings"
@@ -82,6 +83,7 @@ func validField(field string) bool {
 }
 
 func handleJsonFile(file string) error {
+	log.Println("handle rule file :", file)
 	bs, err := ioutil.ReadFile(file)
 	if err != nil {
 		return err
@@ -95,20 +97,22 @@ func handleJsonFile(file string) error {
 }
 
 func InitRulePath(path string) error {
+	log.Println("InitRulePath:", path)
+
 	if f, err := os.Stat(path); err != nil {
 		return err
 	} else {
 		if f.IsDir() {
-			files, _ := ioutil.ReadDir(f.Name())
+			files, _ := ioutil.ReadDir(path)
 			for _, ff := range files {
 				if !ff.IsDir() && strings.HasSuffix(ff.Name(), "json") {
-					if err := handleJsonFile(f.Name() + "/" + ff.Name()); err != nil {
+					if err := handleJsonFile(path + "/" + ff.Name()); err != nil {
 						return err
 					}
 				}
 			}
 		} else {
-			return handleJsonFile(f.Name())
+			return handleJsonFile(path)
 		}
 	}
 	return nil
@@ -117,7 +121,7 @@ func InitRulePath(path string) error {
 func HandleRule(j *JsonRules) error {
 	for _, jsonRule := range j.Rules {
 		if err := CheckRule(jsonRule); err != nil {
-			fmt.Println("CheckRule ", err.Error())
+			log.Println("Error : CheckRule ", err.Error())
 			return err
 		}
 	}
