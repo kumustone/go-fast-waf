@@ -1,0 +1,14 @@
+{
+  "type": "Group",
+  "status": "valid",
+  "rule_name": "信息泄露",
+  "desc": "信息泄露",
+  "group_rule": [
+    {
+      "field": "Url",
+      "op": "is",
+      "empty": false,
+      "val": "(\\/web-inf\\/|\\/\\.git\\/config|\\/\\.svn\\/|\\.war($|\\?|;))"
+    }
+  ]
+}

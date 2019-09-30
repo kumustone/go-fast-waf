@@ -1,0 +1,14 @@
+{
+  "type": "Group",
+  "status": "valid",
+  "rule_name": "scanner",
+  "desc": "扫描器",
+  "group_rule": [
+    {
+      "field": "User-Agent",
+      "op": "is",
+      "empty": false,
+      "val": "\\b(nmap|w3af|sqlmap|acunetix|nessus|webvulnscan|masscan|ce\\.baidu\\.com|WPScan|xmlrpc exploit|wordpress hash grabber|whatweb|w3af|havij|masscan|pangolin|security scan)"
+    }
+  ]
+}

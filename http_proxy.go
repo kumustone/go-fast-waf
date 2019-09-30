@@ -66,6 +66,7 @@ func (h *HttpHandler) ServeHTTP(resp http.ResponseWriter, req *http.Request) {
 	ret := Check(req)
 	if ret != nil && ret.RetCode == WAF_INTERCEPT {
 		log.Printf("Intercept : Rule %s %s %s\n", ret.RuleName, ret.Desc, req)
+		resp.WriteHeader(405)
 		return
 	}
 

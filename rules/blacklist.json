@@ -1,13 +1,9 @@
 {
-  "rules": [
-    {
-      "type": "IpBlackList",
-      "action": "add",
-      "rule_name": "IpBlackList-0",
-      "iplist": [
-        "1.1.1.1",
-        "2.2.2.2"
-      ]
-    }
+  "type": "IpBlackList",
+  "status": "valid",
+  "rule_name": "IpBlackList-0",
+  "ip_list": [
+    "1.1.1.1",
+    "2.2.2.2"
   ]
 }
