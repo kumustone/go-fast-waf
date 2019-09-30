@@ -1,0 +1,16 @@
+{
+  "type": "Group",
+  "status": "valid",
+  "rule_name": "xss-2",
+  "desc": "this is a test rule",
+  "group_rule": [
+    {
+      "field": "Url",
+      "op": "is",
+      "empty": false,
+      "val": "\\b(onmouseenter|onmouseover|onmousemove|onmousedown|onmouseleave|onclick|onload|onerror|onmousewheel|onscroll|onbeforecopy|onbeforecut|onstart|oncontextmenu|oncopy|onfocus|autofocus)\\s*?="
+    }
+  ]
+}
+
+    

@@ -1,0 +1,13 @@
+{
+  "type": "CC",
+  "status": "valid",
+  "rule_name": "cc-1",
+  "desc": "反CC/爬虫",
+  "cc_rule": {
+    "host": "wanwudezhi.com",
+    "interval": 60,
+    "count": 100,
+    "forbid_time": 3600,
+    "key": "ip"
+  }
+}

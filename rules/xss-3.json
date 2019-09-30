@@ -1,0 +1,14 @@
+{
+  "type": "Group",
+  "status": "valid",
+  "rule_name": "xss-3",
+  "desc": "this is a test rule",
+  "group_rule": [
+    {
+      "field": "Url",
+      "op": "is",
+      "empty": false,
+      "val": "(<\\s?\\/?\\b(script|iframe)\\b(\\s|\\+|>){0,5})|(<\\s*embed(\\/|\\s)*src\\s*=)"
+    }
+  ]
+}

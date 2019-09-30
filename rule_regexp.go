@@ -13,7 +13,7 @@ type RuleItem struct {
 
 type Rule struct {
 	Type     string
-	Action   string
+	Status   string
 	RuleName string
 	Desc     string
 	Rule     []*RuleItem
@@ -29,29 +29,49 @@ func NewRuleList() *RuleList {
 	}
 }
 
-func (r *RuleList) HandleRule(j *JsonRule) {
-	if j.Action == "remove" {
+func (r *RuleList) HandleRule(j *JSONRule) {
+	if j.Status == "invalid" {
 		r.Remove(j.RuleName)
 		return
-	} else if j.Action == "add" {
+	} else if j.Status == "valid" {
 		rule := &Rule{
 			Type:     j.Type,
-			Action:   j.Action,
+			Status:   j.Status,
 			RuleName: j.RuleName,
 			Desc:     j.Desc,
 		}
 
 		for _, item := range j.Rule {
-			rule_item := &RuleItem{
+			ruleItem := &RuleItem{
 				JsonGroupRule: item,
 			}
-			rule_item.reg, _ = regexp.Compile(item.Val)
-			rule.Rule = append(rule.Rule, rule_item)
+			ruleItem.reg, _ = regexp.Compile(item.Val)
+			rule.Rule = append(rule.Rule, ruleItem)
 		}
 
 		log.Println("RuleList add rule :", rule)
 		r.Add(rule)
 	}
+}
+
+func (r *RuleList) CleanRules() {
+	r.mutex.Lock()
+	r.Rules = r.Rules[:0:0]
+	r.mutex.Unlock()
+}
+
+func (r *RuleList) CheckRequest(req *WafHttpRequest) *WafProxyResp {
+	r.mutex.RLock()
+
+	for _, item := range r.Rules {
+		if shoot, resp := item.CheckRequest(req); shoot {
+			r.mutex.RUnlock()
+			return resp
+		}
+	}
+
+	r.mutex.RUnlock()
+	return SuccessResp
 }
 
 //查询name的规则是否存在
@@ -89,23 +109,8 @@ func (r *RuleList) Remove(name string) {
 	return
 }
 
-func (r *RuleList) CheckRequest(req *WafHttpRequest) *WafProxyResp {
-	r.mutex.RLock()
-
-	for _, item := range r.Rules {
-		if shoot, resp := item.CheckRequest(req); shoot {
-			r.mutex.RUnlock()
-			return resp
-		}
-	}
-
-	r.mutex.RUnlock()
-	return SuccessResp
-}
-
 func (r *Rule) CheckRequest(req *WafHttpRequest) (bool, *WafProxyResp) {
 	//必须所有RuleItem都满足，才算命中这一条规则
-
 	for _, item := range r.Rule {
 		if !item.CheckRequest(req) {
 			return false, SuccessResp
@@ -154,7 +159,6 @@ func (r *RuleItem) CheckRequest(req *WafHttpRequest) bool {
 	if r.Empty {
 		return Val == ""
 	}
-
 
 	shoot := len(r.reg.FindString(Val)) > 0
 

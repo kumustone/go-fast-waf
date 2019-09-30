@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"strings"
 	"time"
 )
 
@@ -46,9 +47,15 @@ func Check(req *http.Request) *WafProxyResp {
 		Url:           req.RequestURI,
 		Proto:         req.Proto,
 		Host:          req.Host,
+		RemoteAddr:    req.RemoteAddr,
 		ContentLength: uint64(req.ContentLength),
 		Header:        cloneHeader(req.Header),
 		Body:          GetBody(req),
+	}
+
+	//只保留IP即可
+	if s := strings.Split(req.RemoteAddr, ":"); len(s) > 0 {
+		wafReq.RemoteAddr = s[0]
 	}
 
 	resp, err := WafCheck(wafReq, time.Duration(20*time.Millisecond))

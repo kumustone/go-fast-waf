@@ -6,9 +6,12 @@ import (
 
 // 通过URL的关键字来检查哪些需要上传检测，哪些不需要
 type WafCheckList struct {
-	Include      []string // 检测项
-	Exclude      []string // 排除项
-	CheckDefault bool     // 默认url是否检测
+	// 检测项
+	Include      []string
+	// 排除项
+	Exclude      []string
+	// 默认url是否检测
+	CheckDefault bool
 }
 
 // 要连接的waf-server的地址
@@ -94,32 +97,32 @@ func NeedCheck(mark string) bool {
 }
 
 //  比较两个数组的异同点
-func diffSlice(old_array []string, new_array []string) (add []string, remove []string) {
-	for _, item_old := range old_array {
+func diffSlice(oldArrays []string, newArrays []string) (add []string, remove []string) {
+	for _, itemOld := range oldArrays {
 		exist := false
-		for _, item_new := range new_array {
-			if item_old == item_new {
+		for _, itemNew := range newArrays {
+			if itemOld == itemNew {
 				exist = true
 				break
 			}
 		}
 		//已经删除的
 		if exist == false {
-			remove = append(remove, item_old)
+			remove = append(remove, itemOld)
 		}
 	}
 
-	for _, item_new := range new_array {
+	for _, itemNew := range newArrays {
 		exist := false
-		for _, item_old := range old_array {
-			if item_new == item_old {
+		for _, itemOld := range oldArrays {
+			if itemNew == itemOld {
 				exist = true
 				break
 			}
 		}
 
 		if exist == false {
-			add = append(add, item_new)
+			add = append(add, itemNew)
 		}
 	}
 

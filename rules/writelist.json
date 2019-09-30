@@ -1,0 +1,8 @@
+{
+  "type": "IpWhiteList",
+  "status": "valid",
+  "rule_name": "IpWhiteList-0",
+  "ip_list": [
+    "3.3.3.3"
+  ]
+}

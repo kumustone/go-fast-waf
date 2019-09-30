@@ -13,6 +13,10 @@ func GetMicroTime() uint64 {
 	return uint64(time.Now().UnixNano()) / uint64(time.Microsecond)
 }
 
+func Now() int {
+	return int(time.Now().Unix())
+}
+
 func PanicRecovery(quit bool) {
 	var err error
 	if r := recover(); r != nil {

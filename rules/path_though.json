@@ -1,0 +1,14 @@
+{
+  "type": "Group",
+  "status": "valid",
+  "rule_name": "路径穿越",
+  "desc": "路径穿越",
+  "group_rule": [
+    {
+      "field": "Url",
+      "op": "is",
+      "empty": false,
+      "val": "(\\.\\.\\/){2,}"
+    }
+  ]
+}
