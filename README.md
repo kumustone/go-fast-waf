@@ -45,10 +45,11 @@ waf_gate的支持的功能：
 
 ## 1. 安装
 
-    - 依赖 go1.12+
-    - git clone https://github.com/kumustone/waf.git
-    - cd waf 
-    - ./build.sh
+```
+    git clone https://github.com/kumustone/waf.git
+    cd waf 
+    ./build.sh
+```
 
  安装后会生成两个bin文件waf-gate waf-server
 
@@ -173,5 +174,5 @@ ip 黑名单的例子
 
 每一个规则文件里面包含的都是一份完整的json，不同的规则文件，可以叠加使用；
 
-目前支持的规则还比较少，欢迎添加一些规则**
+目前支持的规则还比较少，欢迎添加一些规则;
 
