@@ -4,17 +4,17 @@ import (
 	"sync"
 )
 
-// 通过URL的关键字来检查哪些需要上传检测，哪些不需要
+// WafCheckList 通过URL的关键字来检查哪些需要上传检测，哪些不需要
 type WafCheckList struct {
 	// 检测项
-	Include      []string
+	Include []string
 	// 排除项
-	Exclude      []string
+	Exclude []string
 	// 默认url是否检测
 	CheckDefault bool
 }
 
-// 要连接的waf-server的地址
+// WafServerAddr 要连接的waf-server的地址
 type WafServerAddr struct {
 	Address []string
 }
@@ -46,7 +46,7 @@ var (
 	mutex      sync.RWMutex
 )
 
-//  初始化或者发生动态的改变都调用这个接口
+// InitConfig 初始化或者发生动态的改变都调用这个接口
 func InitConfig(c Config) {
 	mutex.Lock()
 	defer mutex.Unlock()
@@ -77,7 +77,7 @@ func InitConfig(c Config) {
 	}
 }
 
-//判断一个标记是否需要经过waf检查
+// NeedCheck 判断一个标记是否需要经过waf检查
 func NeedCheck(mark string) bool {
 	mutex.RLock()
 	defer mutex.RUnlock()
@@ -96,7 +96,7 @@ func NeedCheck(mark string) bool {
 	return config.CheckList.CheckDefault
 }
 
-//  比较两个数组的异同点
+// 比较两个数组的异同点
 func diffSlice(oldArrays []string, newArrays []string) (add []string, remove []string) {
 	for _, itemOld := range oldArrays {
 		exist := false
