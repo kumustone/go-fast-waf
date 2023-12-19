@@ -77,7 +77,12 @@ func main() {
 		Handler:        waf.WafHandler,
 	}
 
-	go server.ListenAndServe()
+	go func() {
+		err := server.ListenAndServe()
+		if err != nil {
+			fmt.Println("Listen and serve error ", err.Error())
+		}
+	}()
 
 	if c.Gate.StartHttps {
 

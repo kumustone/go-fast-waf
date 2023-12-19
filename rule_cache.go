@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-//命中多条规则，那么以最长的时间为准；
+// BlackInfo 命中多条规则，那么以最长的时间为准；
 type BlackInfo struct {
 	Host    string
 	Key     string
@@ -18,7 +18,7 @@ type BlackMap struct {
 	sessions map[string]*BlackInfo
 }
 
-//第一层以Host作为区分，第二层的Key值可能是IP或是UID
+// CacheBlackList 第一层以Host作为区分，第二层的Key值可能是IP或是UID
 type CacheBlackList struct {
 	sync.RWMutex
 	blackMaps map[string]BlackMap

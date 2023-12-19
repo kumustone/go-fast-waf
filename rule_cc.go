@@ -10,7 +10,7 @@ type CCStat struct {
 	count int
 }
 
-//单个CCRules
+// CCRule 单个CCRules
 type CCRule struct {
 	Host       string
 	Interval   int
