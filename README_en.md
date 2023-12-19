@@ -1,4 +1,5 @@
 # waf
+[简体中文](README.md)
 
 A lightweight Waf detection tool;
 
