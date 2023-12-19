@@ -121,8 +121,9 @@ CheckSwitch = true
 
     # WafServer interface address
     HttpAPIAddress = "127.0.0.1:8001"
+```
 
-4. Rule file description
+##  4. Rule file description
 
 ip blacklist example
 
