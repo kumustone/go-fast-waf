@@ -25,15 +25,16 @@ type RuleList struct {
 }
 
 func NewRuleList() *RuleList {
-	return &RuleList{
-	}
+	return &RuleList{}
 }
 
 func (r *RuleList) HandleRule(j *JSONRule) {
 	if j.Status == "invalid" {
 		r.Remove(j.RuleName)
 		return
-	} else if j.Status == "valid" {
+	}
+
+	if j.Status == "valid" {
 		rule := &Rule{
 			Type:     j.Type,
 			Status:   j.Status,
@@ -45,11 +46,16 @@ func (r *RuleList) HandleRule(j *JSONRule) {
 			ruleItem := &RuleItem{
 				JsonGroupRule: item,
 			}
-			ruleItem.reg, _ = regexp.Compile(item.Val)
+			var err error
+			ruleItem.reg, err = regexp.Compile(item.Val)
+			if err != nil {
+				log.Printf("Error compiling regex for rule %s: %v", j.RuleName, err)
+				continue
+			}
 			rule.Rule = append(rule.Rule, ruleItem)
 		}
 
-		log.Println("RuleList add rule :", rule)
+		log.Printf("RuleList adding rule: %v", rule)
 		r.Add(rule)
 	}
 }
@@ -74,7 +80,7 @@ func (r *RuleList) CheckRequest(req *WafHttpRequest) *WafProxyResp {
 	return SuccessResp
 }
 
-//查询name的规则是否存在
+// 查询name的规则是否存在
 func (r *RuleList) Exist(name string) bool {
 	r.mutex.RLock()
 	defer r.mutex.RUnlock()
@@ -148,7 +154,7 @@ func GetFieldFromReq(req *WafHttpRequest, field string) string {
 	return ""
 }
 
-//对正则进行一次预编译
+// 对正则进行一次预编译
 func (r *RuleItem) CompileReg() (err error) {
 	r.reg, err = regexp.Compile(r.Val)
 	return
