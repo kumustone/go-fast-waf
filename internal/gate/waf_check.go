@@ -1,8 +1,8 @@
-package main
+package gate
 
 import (
 	"bytes"
-	. "go-fast-waf/share"
+	. "go-fast-waf/internal/share"
 	"io/ioutil"
 	"log"
 	"net/http"

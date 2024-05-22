@@ -1,7 +1,7 @@
-package main
+package server
 
 import (
-	. "go-fast-waf/share"
+	. "go-fast-waf/internal/share"
 	"log"
 	"regexp"
 	"sync"

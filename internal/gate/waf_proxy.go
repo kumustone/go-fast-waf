@@ -1,9 +1,9 @@
-package main
+package gate
 
 import (
 	"errors"
 	"github.com/kumustone/tcpstream"
-	. "go-fast-waf/share"
+	. "go-fast-waf/internal/share"
 	"time"
 )
 
