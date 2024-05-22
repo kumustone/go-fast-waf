@@ -1,53 +1,45 @@
 [gate]
-#Gate Http Listen Address
+# Gate HTTP Listen Address
 GateHttpAddress = "0.0.0.0:80"
 
-# Gate Https Listen Addresses
+# Gate HTTPS Listen Addresses
 StartHttps = true
 GateHttpsAddress = "0.0.0.0:443"
 
-# 多个二级域名使用不同的key
+# Different keys for multiple subdomains
 CertKeyList = [
-[
-    "A.xxx.com",
-    "A.pem",
-    "A.key"
-],
-[
-    "B.xxx.com",
-    "B.pem",
-    "B.key"
-]
+    ["A.xxx.com", "A.pem", "A.key"],
+    ["B.xxx.com", "B.pem", "B.key"]
 ]
 
 CertFile = "xxxxxxx.pem"
-KeyFile  = "xxxxx.key"
+KeyFile = "xxxxx.key"
 
 # Gat API Service
 GateAPIAddress = "0.0.0.0:2081"
 
-# Upstream Address， RoundBin
+# Upstream Address, RoundRobin
 UpstreamList = [
     "1.1.1.1:80"
 ]
 
-# Waf检测项
+# WAF detection items
 [wafrpc]
 
-# 检测开关，如果为false，所有的内容都不发送waf-server监测，直接转发给upstream处理；
-# true: 按照Checklist规则处理；
+# Detection switch: if false, all content is forwarded directly to upstream without sending to waf-server for monitoring;
+# true: process according to the Checklist rules;
 CheckSwitch = true
+
 [wafrpc.CheckList]
-    # 需要检测项Host
+    # Hosts to be checked
     Include = ["xxxxxxx"]
 
-    # 排除检测项Host
+    # Excluded Hosts
     Exclude = []
 
-    # Include 和 Exclude以外的Host，是否检测；
+    # Whether to check hosts other than those in Include and Exclude
     CheckDefault = true
+
 [wafrpc.ServerAddr]
-    # waf-server的地址列表；如果是多个，如果有多个waf-server按照轮询策略转发请求；
+    # List of waf-server addresses; if there are multiple waf-servers, requests are load-balanced in a round-robin manner
     Address = ["127.0.0.1:8000"]
-
-

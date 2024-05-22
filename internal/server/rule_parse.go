@@ -1,8 +1,8 @@
-package main
+package server
 
 import (
 	"encoding/json"
-	. "go-fast-waf/share"
+	. "go-fast-waf/internal/share"
 	"io/ioutil"
 	"log"
 	"os"

@@ -1,8 +1,8 @@
 [server]
-# WafServer的监听地址
+# WafServer Listen Address
 WafServerAddress = "127.0.0.1:8000"
 
-# WafServer接口地址
+# WafServer API Address
 HttpAPIAddress = "127.0.0.1:8001"
 
 

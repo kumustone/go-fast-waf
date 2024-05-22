@@ -1,7 +1,7 @@
-package main
+package gate
 
 import (
-	. "go-fast-waf/share"
+	. "go-fast-waf/internal/share"
 	"log"
 	"net"
 	"net/http"
