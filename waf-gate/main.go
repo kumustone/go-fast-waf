@@ -6,8 +6,8 @@ import (
 	"flag"
 	"fmt"
 	"github.com/BurntSushi/toml"
-	"github.com/kumustone/waf"
-	"github.com/natefinch/lumberjack"
+	. "go-fast-waf/share"
+	lumberjack "gopkg.in/natefinch/lumberjack.v2"
 	"log"
 	"net/http"
 	_ "net/http/pprof"
@@ -25,7 +25,7 @@ type GateConfig struct {
 
 type WafGateConfig struct {
 	Gate   GateConfig
-	WAFRPC waf.Config
+	WAFRPC Config
 }
 
 var (
@@ -44,7 +44,7 @@ func main() {
 
 	log.Println(c)
 
-	defer waf.PanicRecovery(true)
+	defer PanicRecovery(true)
 
 	log.SetOutput(&lumberjack.Logger{
 		Filename:   *logPath + "/waf_gate.log",
@@ -58,23 +58,23 @@ func main() {
 		log.Println(http.ListenAndServe("0.0.0.0:60060", nil))
 	}()
 
-	waf.InitConfig(c.WAFRPC)
-	waf.WaitServerNotify()
+	InitConfig(c.WAFRPC)
+	WaitServerNotify()
 
 	for _, it := range c.Gate.UpstreamList {
-		waf.UpStream.Add(&waf.RouterItem{
+		UpStream.Add(&RouterItem{
 			Key: it,
 		})
 	}
 
-	waf.UpStream.WaitNotify()
+	UpStream.WaitNotify()
 	server := &http.Server{
 		Addr:           c.Gate.GateHttpAddress,
 		IdleTimeout:    3 * time.Minute,
 		ReadTimeout:    5 * time.Minute,
 		WriteTimeout:   5 * time.Minute,
 		MaxHeaderBytes: 20 * 1024 * 1024,
-		Handler:        waf.WafHandler,
+		Handler:        WafHandler,
 	}
 
 	go func() {
@@ -113,7 +113,7 @@ func main() {
 			ReadTimeout:    5 * time.Minute,
 			WriteTimeout:   5 * time.Minute,
 			MaxHeaderBytes: 20 * 1024 * 1024,
-			Handler:        waf.WafHandler,
+			Handler:        WafHandler,
 			TLSConfig:      cfg,
 		}
 		fmt.Println("Https start at ", c.Gate.GateHttpsAddress)

@@ -3,9 +3,9 @@ package main
 import (
 	"flag"
 	"github.com/BurntSushi/toml"
-	"github.com/kumustone/waf"
 	"github.com/kumustone/tcpstream"
-	"github.com/natefinch/lumberjack"
+	. "go-fast-waf/share"
+	lumberjack "gopkg.in/natefinch/lumberjack.v2"
 	"log"
 )
 
@@ -36,7 +36,7 @@ func main() {
 		return
 	}
 
-	defer waf.PanicRecovery(true)
+	defer PanicRecovery(true)
 	log.SetOutput(&lumberjack.Logger{
 		Filename:   *logPath + "/waf_server.log",
 		MaxSize:    10,
@@ -44,7 +44,7 @@ func main() {
 		MaxAge:     30,
 	})
 
-	if err := waf.InitRulePath(*rulePath); err != nil {
+	if err := InitRulePath(*rulePath); err != nil {
 		log.Fatal("InitRulePath : ", err.Error())
 	}
 
@@ -60,13 +60,13 @@ func main() {
 type ServerHandler struct{}
 
 func (*ServerHandler) OnData(conn *tcpstream.TcpStream, msg *tcpstream.Message) error {
-	request := &waf.WafHttpRequest{}
+	request := &WafHttpRequest{}
 	if err := request.UnmarshalJSON(msg.Body); err != nil {
 		return err
 	}
 
-	var resp *waf.WafProxyResp
-	for _, c := range waf.CheckList {
+	var resp *WafProxyResp
+	for _, c := range CheckList {
 		resp = c.CheckRequest(request)
 		if resp.RuleName != "" {
 			break

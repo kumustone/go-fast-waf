@@ -1,4 +1,4 @@
-package waf
+package share
 
 import (
 	"fmt"
@@ -10,7 +10,7 @@ import (
 做调试使用，对整个数据流进行打点，以便找到可能的阻塞点；
 */
 
-//跟踪msg打点
+// 跟踪msg打点
 type timeStamp struct {
 	time uint64 // 打点时间，单位是us
 	name string // 打点名称
@@ -40,7 +40,7 @@ func NewMsgTrace() *MsgTrace {
 	return mt
 }
 
-//设置消息打点, 单独跟踪一条消息，默认为是线程安全的
+// 设置消息打点, 单独跟踪一条消息，默认为是线程安全的
 func (mt *MsgTrace) MarkTimeStamp(name string) {
 	mt.trace = append(mt.trace, &timeStamp{
 		time: uint64(time.Now().UnixNano()) / uint64(time.Microsecond),
@@ -48,7 +48,7 @@ func (mt *MsgTrace) MarkTimeStamp(name string) {
 	})
 }
 
-//打点时间输出
+// 打点时间输出
 func (mt *MsgTrace) OutputString() string {
 	if len(mt.trace) == 0 {
 		return "null"
@@ -66,7 +66,7 @@ func (mt *MsgTrace) OutputString() string {
 
 const sessionMapNum = 8
 
-//key: requestid, value: 同步等待返回的wait
+// key: requestid, value: 同步等待返回的wait
 type requestMap struct {
 	rwmutex  sync.RWMutex
 	sessions map[uint64]*MsgTrace

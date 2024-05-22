@@ -1,9 +1,39 @@
+
+# bin file
+waf-gate/waf-gate
+waf-server/waf-server
+
 # Created by .ignore support plugin (hsz.mobi)
-.idea/
-pkg/
-bin/*
-log/*
-conf/*.conf
+# Compiled binary files
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Executables
 bin/
-waf_server
-waf_gate
+out/
+
+# Go specific
+# Ignore the go binary
+*.test
+*.prof
+
+# Ignore the output of go test
+*.out
+
+# Ignore the vendor directory
+vendor/
+
+# Ignore go modules cache
+/go.sum
+
+# IDE-specific files
+.idea/
+.vscode/
+*.swp
+*.swo
+*.swn
+*.swm
+*.swpx
+*.swx

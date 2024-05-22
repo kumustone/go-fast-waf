@@ -1,7 +1,8 @@
-package waf
+package main
 
 import (
 	"encoding/json"
+	. "go-fast-waf/share"
 	"io/ioutil"
 	"log"
 	"os"

@@ -1,4 +1,4 @@
-package waf
+package main
 
 import (
 	"sync/atomic"
@@ -12,7 +12,7 @@ var (
 	rtt RTT
 )
 
-//RTT统计的基础类
+// RTT统计的基础类
 type RTT struct {
 	name  string // 统计类目名称
 	count uint64 // 总个数
