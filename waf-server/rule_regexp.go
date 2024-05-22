@@ -1,6 +1,7 @@
-package waf
+package main
 
 import (
+	. "go-fast-waf/share"
 	"log"
 	"regexp"
 	"sync"

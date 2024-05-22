@@ -1,4 +1,4 @@
-package waf
+package share
 
 const (
 	WAF_PASS = iota

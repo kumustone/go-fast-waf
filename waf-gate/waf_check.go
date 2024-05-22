@@ -1,7 +1,8 @@
-package waf
+package main
 
 import (
 	"bytes"
+	. "go-fast-waf/share"
 	"io/ioutil"
 	"log"
 	"net/http"

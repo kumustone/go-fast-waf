@@ -1,8 +1,9 @@
-package waf
+package main
 
 import (
 	"errors"
 	"github.com/kumustone/tcpstream"
+	. "go-fast-waf/share"
 	"time"
 )
 
