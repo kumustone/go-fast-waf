@@ -1,30 +1,36 @@
-# waf
+# go-fast-waf
 
 [English](README_en.md)
-轻量级的Waf检测工具；
 
-基于Go语言包含Http/Https反向代理的网关waf-gate和一个执行检测任务的waf-server组成；
+**轻量级，低延迟，高性能，易于配置，网关和Waf解耦的风险检测服务.**
 
-![](https://github.com/kumustone/waf/blob/master/doc/waf-1.jpg)
+![](https://github.com/kumustone/go-fast-waf/blob/main/doc/waf-1.jpg)
 
+## 组件介绍
+1. waf-gate：一个基于 Go 语言编写的极简 HTTP/HTTPS 反向代理。
+2. waf-server：负责执行Waf检测，黑白名单，访问控制，反爬等风险检测任务执行。
 
+**为什么 waf-gate和waf-server 分离**
 
-waf_gate是极轻量的的httpproxy反向代理，在go本身reverseproxy库的基础上做了很少量的封装和功能添加，性能损失非常小。waf_gate本身具有简单的路由分发功能，如果网站部署本分非常简单，没有业务路由，可以直接通过waf-gate分发给下一级的业务服务器。如果路由较为复杂，那么waf_gate直接转发给下一级的proxy（比如NGINX）进行路由分发；在此过程中waf_gate对整个业务链条来说是完全透明的。
+基于业务场景的考虑前提，即优先保证网关稳定性，高性能和低延迟， waf检测次之。
+1. 网关稳定性风险解耦， 主要是稳定性风险和延迟风险。
+ * waf-server出现崩溃时，waf-gate和waf-server长连接断开。数据不再发送waf-server检测； 
+ * waf-server出现延迟，waf-gate的client超时机制会保证会在最大超时时间内（默认20ms）把数据转发到upstream server上，不影响业务的正常运行。
+ * waf-server通过会有计算量大操作和入库等行为，如果waf-server和waf-gate是同一个工程，部署在同一台机器上存在资源征用的问题。响应网关的响应速度。
+2. 方便分布式部署扩展，可以部署1对多部署，弥补某些复杂检测业务的waf性能不足。
 
-waf检测是通过waf_gate转发给waf_server，然后waf_server将检测结果返回给waf_gate来做拦截还是放过操作。没有直接在waf_gate直接做规则的原因主要基于以下几个考虑：
+**waf-gate**
 
-1. 如果检测规则过于复杂，尤其在包含大量正则的情况下，CPU耗时消耗会比较高，影响waf_gate的转发时间，从而增加整个链路的业务耗时；
-2. waf检测可能会缓存大量的数据，导致内存过大，GC耗时过长；
-3. 有一些规则需要多个httpproxy的数据进行汇总，然后进行处理；这样httpProxy就无能无力；
-4. 在实际的应用场景中，请求和响应数据可能需要存储；
+1. **轻量级**：waf-gate 是一个非常轻量级的 HTTP 代理。它在 Go 的反向代理库基础上进行了极少量的修改和功能扩展。最大程度保证waf-gate运行的稳定性。
+2. **路由功能**：如果您的网站部署很简单，没有复杂的业务路由，waf-gate 可以直接将请求分发给下游的业务服务器。但如果路由较为复杂，waf-gate 会将请求转发给另一个代理（例如 NGINX）进行进一步的路由。无论哪种情况，waf-gate 对整个业务链条来说都是完全透明的。
+3. **Web风险检测** ： waf-gate 将请求转发给 waf-server 进行检测，然后 waf-server 将检测结果返回给 waf-gate，以便拦截或允许请求继续。
 
+**waf-server**
 
-
-waf_gate的支持的功能：
-
-- 轻量级，性能、RT损耗非常小；
-- 支持重写请求包头包，响应头，响应尾部；
-
+1. **通信方式**：waf-gate 与 waf-server 之间通过长连接的 TCP 通信，使用 tcpstream 库实现。
+2. **多连接支持**：waf-gate 与 waf-server 之间建立多个连接，采用轮询策略将请求分发给 waf-server 进行检测。
+3. **超时处理**：waf-gate 支持检测超时设置，如果网络或其他异常导致 waf-server 未能及时响应，waf-gate 会自动放行请求。
+4. **自动重连**：如果当前没有可用的 waf-server 响应，waf-gate 会自动放行所有请求。
 
 
 **waf_gate与waf_server的网络通信**，是通过[tcpstream](<https://github.com/kumustone/tcpstream>)的库来实现的
@@ -34,7 +40,7 @@ waf_gate的支持的功能：
 - waf_gate支持检测超时设置，如果网络或者其他异常导致请求没有及时回复，那么waf_gate自动放过；
 - waf_gate启动自动重连功能，如果没有当前没有可用的waf-server请求，那么放过所有请求；
 
-**规则功能**
+## 规则功能
 
 - 支持IP黑白名单；
 
