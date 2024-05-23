@@ -1,8 +1,8 @@
 
 # bin file
 # Ignore waf-server and waf-gate executables
-#waf-server
-#waf-gate
+waf-server*
+waf-gate*
 
 # Created by .ignore support plugin (hsz.mobi)
 # Compiled binary files
