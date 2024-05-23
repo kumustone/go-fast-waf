@@ -54,11 +54,8 @@
 
 ```
     git clone https://github.com/kumustone/waf.git
-    cd waf 
-    ./build.sh
+    make   # make完成后会在bin目录下面生成waf-gate, waf-server两个文件。
 ```
-
- 安装后会生成两个bin文件waf-gate waf-server
 
 ## 2. 运行
 
