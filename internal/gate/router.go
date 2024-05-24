@@ -1,4 +1,4 @@
-package waf
+package gate
 
 import (
 	"sync"
@@ -66,7 +66,7 @@ func (r *Router) addSize(d int32) int32 {
 	return atomic.AddInt32(&r.counter, d)
 }
 
-//做健康监测使用
+// 做健康监测使用
 func (r *Router) Remove(key string) {
 	exist := false
 	index := 0

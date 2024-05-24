@@ -1,6 +1,7 @@
-package waf
+package server
 
 import (
+	"go-fast-waf/internal/share"
 	"log"
 	"sync"
 	"time"
@@ -34,10 +35,10 @@ func NewCacheBlackList() *CacheBlackList {
 	return manager
 }
 
-func (c *CacheBlackList) CheckRequest(req *WafHttpRequest) *WafProxyResp {
+func (c *CacheBlackList) CheckRequest(req *share.WafHttpRequest) *share.WafProxyResp {
 	if b := c.Match(req.Mark, req.RemoteAddr); b != nil {
-		return &WafProxyResp{
-			RetCode:  WAF_INTERCEPT,
+		return &share.WafProxyResp{
+			RetCode:  share.WAF_INTERCEPT,
 			RuleName: "CacheBlackList",
 			Desc:     "缓存黑名单",
 		}
@@ -98,7 +99,7 @@ func (c *CacheBlackList) Match(host string, key string) *BlackInfo {
 func (c *CacheBlackList) CleanLoop() {
 	for {
 		c.Lock()
-		now := Now()
+		now := share.Now()
 		for key, value := range c.blackMaps {
 			for key1, value1 := range value.sessions {
 				if value1.EndTime <= now {

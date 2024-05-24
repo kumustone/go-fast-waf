@@ -1,14 +1,14 @@
-package waf
+package share
 
 import (
+	"errors"
+	"log"
 	"os"
 	"runtime/debug"
 	"time"
-	"log"
-	"errors"
 )
 
-//获取当前的微秒时间
+// 获取当前的微秒时间
 func GetMicroTime() uint64 {
 	return uint64(time.Now().UnixNano()) / uint64(time.Microsecond)
 }

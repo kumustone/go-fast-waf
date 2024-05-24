@@ -1,0 +1,45 @@
+[gate]
+# Gate HTTP Listen Address
+GateHttpAddress = "0.0.0.0:80"
+
+# Gate HTTPS Listen Addresses
+StartHttps = true
+GateHttpsAddress = "0.0.0.0:443"
+
+# Different keys for multiple subdomains
+CertKeyList = [
+    ["A.xxx.com", "A.pem", "A.key"],
+    ["B.xxx.com", "B.pem", "B.key"]
+]
+
+CertFile = "xxxxxxx.pem"
+KeyFile = "xxxxx.key"
+
+# Gat API Service
+GateAPIAddress = "0.0.0.0:2081"
+
+# Upstream Address, RoundRobin
+UpstreamList = [
+    "1.1.1.1:80"
+]
+
+# WAF detection items
+[wafrpc]
+
+# Detection switch: if false, all content is forwarded directly to upstream without sending to waf-server for monitoring;
+# true: process according to the Checklist rules;
+CheckSwitch = true
+
+[wafrpc.CheckList]
+    # Hosts to be checked
+    Include = ["xxxxxxx"]
+
+    # Excluded Hosts
+    Exclude = []
+
+    # Whether to check hosts other than those in Include and Exclude
+    CheckDefault = true
+
+[wafrpc.ServerAddr]
+    # List of waf-server addresses; if there are multiple waf-servers, requests are load-balanced in a round-robin manner
+    Address = ["127.0.0.1:8000"]

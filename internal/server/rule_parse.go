@@ -1,7 +1,8 @@
-package waf
+package server
 
 import (
 	"encoding/json"
+	. "go-fast-waf/internal/share"
 	"io/ioutil"
 	"log"
 	"os"
