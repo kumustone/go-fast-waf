@@ -4,7 +4,7 @@
 
 **轻量级，低延迟，高性能，易于配置，网关和Waf解耦的风险检测服务.**
 
-![](https://github.com/kumustone/go-fast-waf/blob/main/doc/waf-1.jpg)
+![](https://github.com/kumustone/go-fast-waf/blob/main/doc/go-fast-waf-1.png)
 
 ## 组件介绍
 1. waf-gate：一个基于 Go 语言编写的极简 HTTP/HTTPS 反向代理。
