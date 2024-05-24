@@ -1,6 +1,7 @@
-package waf
+package gate
 
 import (
+	. "go-fast-waf/internal/share"
 	"log"
 	"net"
 	"net/http"
